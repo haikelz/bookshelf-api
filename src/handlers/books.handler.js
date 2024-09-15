@@ -10,7 +10,7 @@ export class BooksHandler {
     this.book = new Book();
   }
 
-  getAllBooks(req, h) {
+  getAllBooks(_, h) {
     return h
       .response({
         status: STATUS.success,
@@ -45,16 +45,7 @@ export class BooksHandler {
   }
 
   saveNewBook(req, h) {
-    const {
-      name,
-      year,
-      author,
-      summary,
-      publisher,
-      pageCount,
-      readPage,
-      reading,
-    } = req.payload;
+    const { name, pageCount, readPage } = req.payload;
 
     if (!name) {
       return h
@@ -75,7 +66,12 @@ export class BooksHandler {
         .code(400);
     }
 
-    books.push({ id: nanoid(), ...req.payload });
+    books.push({
+      id: nanoid(),
+      ...req.payload,
+      insertedAt: new Date(),
+      updatedAt: null,
+    });
 
     return h
       .response({
@@ -87,7 +83,6 @@ export class BooksHandler {
 
   updateBook(req, h) {
     const bookId = escapeHtml(req.params.bookId);
-    // books.map((item) => (item.id === bookId ? { ...req.payload } : item));
 
     const {
       name,
@@ -100,7 +95,8 @@ export class BooksHandler {
       reading,
     } = req.payload;
 
-    // 400
+    const findIndex = books.findIndex((item) => item.id === bookId);
+
     if (!name) {
       return h
         .response({
@@ -110,7 +106,6 @@ export class BooksHandler {
         .code(400);
     }
 
-    // 400
     if (readPage > pageCount) {
       return h
         .response({
@@ -121,37 +116,49 @@ export class BooksHandler {
         .code(400);
     }
 
-    // 404
-    if (!bookId) {
+    if (bookId && findIndex !== -1) {
+      books[findIndex] = {
+        ...books[findIndex],
+        name,
+        year,
+        author,
+        summary,
+        publisher,
+        pageCount,
+        readPage,
+        reading,
+        updatedAt: new Date().toISOString(),
+      };
+
+      return h
+        .response({
+          status: STATUS.success,
+          message: "Buku berhasil diperbarui",
+        })
+        .code(200);
+    } else {
       return h
         .response({
           status: STATUS.fail,
           message: "Gagal memperbarui buku. Id tidak ditemukan",
         })
-        .code(404);
+        .code(400);
     }
-
-    return h
-      .response({
-        status: STATUS.success,
-        message: "Buku berhasil diperbarui",
-      })
-      .code(200);
   }
 
   deleteBook(req, h) {
     const bookId = req.params.bookId;
     const findSameId = books.findIndex((item) => item.id === bookId);
 
-    if (findSameId === -1) {
+    if (findSameId !== -1) {
       books.splice(findSameId, 1);
-    }
 
-    return h
-      .response({
-        status: STATUS.success,
-        message: "Buku berhasil dihapus",
-      })
-      .code(201);
+      return h
+        .response({
+          status: STATUS.success,
+          message: "Buku berhasil dihapus",
+        })
+        .code(201);
+    }
   }
 }
