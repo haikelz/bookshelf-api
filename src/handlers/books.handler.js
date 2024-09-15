@@ -1,4 +1,5 @@
 import { Book, books } from "../configs/data.js";
+import { boomify } from "@hapi/boom";
 import { escapeHtml } from "@hapi/hoek";
 import { nanoid } from "nanoid";
 
@@ -49,8 +50,6 @@ export class BooksHandler {
 
   updateBook(req) {
     const bookId = escapeHtml(req.params.bookId);
-    console.log(bookId);
-
     books.map((item) => (item.id === bookId ? { ...req.payload } : item));
 
     return {
@@ -59,7 +58,7 @@ export class BooksHandler {
     };
   }
 
-  deleteBook(req, h) {
+  deleteBook(req) {
     const bookId = req.params.bookId;
 
     const findSameId = books.findIndex((item) => item.id === bookId);
