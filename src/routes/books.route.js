@@ -20,12 +20,12 @@ export const booksRoute = [
   },
   {
     method: "PUT",
-    path: "/books/:bookId",
+    path: "/books/{bookId}",
     handler: booksHandler.updateBook,
   },
   {
     method: "DELETE",
-    path: "/books/:bookId",
+    path: "/books/{bookId}",
     handler: booksHandler.deleteBook,
   },
 ];

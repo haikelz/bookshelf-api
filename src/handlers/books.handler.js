@@ -1,4 +1,6 @@
 import { Book, books } from "../configs/data.js";
+import { escapeHtml } from "@hapi/hoek";
+import { nanoid } from "nanoid";
 
 export class BooksHandler {
   book;
@@ -18,7 +20,7 @@ export class BooksHandler {
 
   getDetailBook(req) {
     const bookId = escapeHtml(req.params.bookId);
-    const findBook = books.find((item) => item.bookId === bookId);
+    const findBook = books.find((item) => item.id === bookId);
 
     if (findBook) {
       return {
@@ -46,7 +48,10 @@ export class BooksHandler {
   }
 
   updateBook(req) {
-    const bookId = req.params.bookId;
+    const bookId = escapeHtml(req.params.bookId);
+    console.log(bookId);
+
+    books.map((item) => (item.id === bookId ? { ...req.payload } : item));
 
     return {
       status: "success",
@@ -54,8 +59,14 @@ export class BooksHandler {
     };
   }
 
-  deleteBook(req) {
+  deleteBook(req, h) {
     const bookId = req.params.bookId;
+
+    const findSameId = books.findIndex((item) => item.id === bookId);
+
+    if (findSameId === -1) {
+      books.splice(findSameId, 1);
+    }
 
     return {
       status: "success",

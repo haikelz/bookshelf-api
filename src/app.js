@@ -1,7 +1,7 @@
-import Hapi from "@hapi/hapi";
-import dotenv from "dotenv";
 import { HOST, PORT } from "./configs/constants.js";
 import { booksRoute } from "./routes/books.route.js";
+import Hapi from "@hapi/hapi";
+import dotenv from "dotenv";
 
 dotenv.config();
 
