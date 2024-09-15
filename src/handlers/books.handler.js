@@ -10,22 +10,54 @@ export class BooksHandler {
     this.book = new Book();
   }
 
-  getAllBooks(_, h) {
-    return h
-      .response({
+  getAllBooks(req, h) {
+    const query = req.query;
+
+    if (query.name || query.reading || query.finished) {
+      const filteredBooks = books.filter((item) => {
+        let isFiltered = true;
+
+        for (const key in query) {
+          isFiltered =
+            isFiltered &&
+            item[key] ==
+              (key === "reading" || key === "finished"
+                ? Number(escapeHtml(query[key]))
+                : escapeHtml(query[key]));
+        }
+
+        return isFiltered;
+      });
+
+      return h
+        .response({
+          status: STATUS.success,
+          data: {
+            books: filteredBooks,
+          },
+        })
+        .code(200);
+    } else {
+      const selectedDataBooks = books.map((item) => ({
+        id: item.id,
+        name: item.name,
+        publisher: item.publisher,
+      }));
+
+      return h.response({
         status: STATUS.success,
         data: {
-          books,
+          books: selectedDataBooks,
         },
-      })
-      .code(200);
+      });
+    }
   }
 
   getDetailBook(req, h) {
     const bookId = escapeHtml(req.params.bookId);
     const findBook = books.find((item) => item.id === bookId);
 
-    if (findBook) {
+    if (findBook && bookId) {
       return h
         .response({
           status: STATUS.success,
@@ -69,7 +101,7 @@ export class BooksHandler {
     books.push({
       id: nanoid(),
       ...req.payload,
-      insertedAt: new Date(),
+      insertedAt: new Date().toISOString(),
       updatedAt: null,
     });
 
