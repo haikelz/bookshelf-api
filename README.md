@@ -12,3 +12,16 @@
 - Get spesific book.
 - Update book.
 - Delete book.
+- Implemented Query params to Route `/books` for advanced filtering.
+
+## Technologies
+
+- Hapi JS
+
+## Screenshots
+
+- Test eslint and prettier
+
+  ![test eslint and prettier](/public/docs/Screenshot%20from%202024-09-16%2001-48-57.png)
+
+  ![test eslint and prettier](/public/docs/Screenshot%20from%202024-09-16%2001-49-02.png)
