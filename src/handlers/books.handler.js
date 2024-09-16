@@ -82,7 +82,7 @@ export class BooksHandler {
           status: status.fail,
           message: "Buku tidak ditemukan",
         })
-        .code(400);
+        .code(404);
     }
   }
 
@@ -109,17 +109,23 @@ export class BooksHandler {
         .code(400);
     }
 
+    const dateNow = new Date().toISOString();
+    const bookId = nanoid(16);
+
     books.push({
-      id: nanoid(16),
+      id: bookId,
       ...req.payload,
-      insertedAt: new Date().toISOString(),
-      updatedAt: null,
+      insertedAt: dateNow,
+      updatedAt: dateNow,
     });
 
     return h
       .response({
         status: status.success,
         message: "Buku berhasil ditambahkan",
+        data: {
+          bookId,
+        },
       })
       .code(201);
   }
@@ -186,7 +192,7 @@ export class BooksHandler {
           status: status.fail,
           message: "Gagal memperbarui buku. Id tidak ditemukan",
         })
-        .code(400);
+        .code(404);
     }
   }
 
@@ -203,7 +209,7 @@ export class BooksHandler {
           status: status.success,
           message: "Buku berhasil dihapus",
         })
-        .code(201);
+        .code(200);
     }
   }
 }
