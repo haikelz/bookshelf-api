@@ -1,16 +1,11 @@
-import { STATUS } from "../configs/constants.js";
-import { Book, books } from "../configs/data.js";
+import { Book, Status } from "../configs/data.js";
 import { escapeHtml } from "@hapi/hoek";
 import { nanoid } from "nanoid";
 
 export class BooksHandler {
-  book;
-
-  constructor() {
-    this.book = new Book();
-  }
-
   getAllBooks(req, h) {
+    const books = [new Book()];
+    const status = new Status();
     const query = req.query;
 
     if (query.name || query.reading || query.finished) {
@@ -31,7 +26,7 @@ export class BooksHandler {
 
       return h
         .response({
-          status: STATUS.success,
+          status: status.success,
           data: {
             books: filteredBooks,
           },
@@ -44,23 +39,27 @@ export class BooksHandler {
         publisher: item.publisher,
       }));
 
-      return h.response({
-        status: STATUS.success,
-        data: {
-          books: selectedDataBooks,
-        },
-      });
+      return h
+        .response({
+          status: status.success,
+          data: {
+            books: selectedDataBooks,
+          },
+        })
+        .code(200);
     }
   }
 
   getDetailBook(req, h) {
+    const books = [new Book()];
+    const status = new Status();
     const bookId = escapeHtml(req.params.bookId);
     const findBook = books.find((item) => item.id === bookId);
 
     if (findBook && bookId) {
       return h
         .response({
-          status: STATUS.success,
+          status: status.success,
           data: {
             book: findBook,
           },
@@ -69,20 +68,22 @@ export class BooksHandler {
     } else {
       return h
         .response({
-          status: STATUS.fail,
+          status: status.fail,
           message: "Buku tidak ditemukan",
         })
-        .code(404);
+        .code(400);
     }
   }
 
   saveNewBook(req, h) {
+    const books = [new Book()];
+    const status = new Status();
     const { name, pageCount, readPage } = req.payload;
 
     if (!name) {
       return h
         .response({
-          status: STATUS.fail,
+          status: status.fail,
           message: "Gagal menambahkan buku. Mohon isi nama buku",
         })
         .code(400);
@@ -91,7 +92,7 @@ export class BooksHandler {
     if (readPage > pageCount) {
       return h
         .response({
-          status: STATUS.fail,
+          status: status.fail,
           message:
             "Gagal menambahkan buku. readPage tidak boleh lebih besar dari pageCount",
         })
@@ -99,7 +100,7 @@ export class BooksHandler {
     }
 
     books.push({
-      id: nanoid(),
+      id: nanoid(16),
       ...req.payload,
       insertedAt: new Date().toISOString(),
       updatedAt: null,
@@ -107,13 +108,15 @@ export class BooksHandler {
 
     return h
       .response({
-        status: STATUS.success,
+        status: status.success,
         message: "Buku berhasil ditambahkan",
       })
       .code(201);
   }
 
   updateBook(req, h) {
+    const books = [new Book()];
+    const status = new Status();
     const bookId = escapeHtml(req.params.bookId);
 
     const {
@@ -132,7 +135,7 @@ export class BooksHandler {
     if (!name) {
       return h
         .response({
-          status: STATUS.fail,
+          status: status.fail,
           message: "Gagal memperbarui buku. Mohon isi nama buku",
         })
         .code(400);
@@ -141,7 +144,7 @@ export class BooksHandler {
     if (readPage > pageCount) {
       return h
         .response({
-          status: STATUS.fail,
+          status: status.fail,
           message:
             "Gagal memperbarui buku. readPage tidak boleh lebih besar dari pageCount",
         })
@@ -164,14 +167,14 @@ export class BooksHandler {
 
       return h
         .response({
-          status: STATUS.success,
+          status: status.success,
           message: "Buku berhasil diperbarui",
         })
         .code(200);
     } else {
       return h
         .response({
-          status: STATUS.fail,
+          status: status.fail,
           message: "Gagal memperbarui buku. Id tidak ditemukan",
         })
         .code(400);
@@ -179,6 +182,8 @@ export class BooksHandler {
   }
 
   deleteBook(req, h) {
+    const books = [new Book()];
+    const status = new Status();
     const bookId = req.params.bookId;
     const findSameId = books.findIndex((item) => item.id === bookId);
 
@@ -187,7 +192,7 @@ export class BooksHandler {
 
       return h
         .response({
-          status: STATUS.success,
+          status: status.success,
           message: "Buku berhasil dihapus",
         })
         .code(201);

@@ -5,6 +5,7 @@
   "license": "MIT",
   "main": "app.js",
   "type": "module",
+  "description": "This project are created for final assignment that given from Dicoding Indonesia",
   "repository": {
     "type": "git",
     "url": "https://github.com/haikelz/bookshelf-api"
@@ -16,7 +17,6 @@
     "lint:fix": "eslint --fix .",
     "start": "node src/app.js"
   },
-  "description": "",
   "dependencies": {
     "@hapi/hapi": "^21.3.10",
     "@hapi/hoek": "^11.0.4",

@@ -12,7 +12,7 @@
 - Get spesific book.
 - Update book.
 - Delete book.
-- Implemented Query params to Route `/books` for advanced filtering.
+- Implemented Query params in Route `/books` for advanced filtering.
 
 ## Technologies
 

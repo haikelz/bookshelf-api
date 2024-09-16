@@ -1,5 +1,5 @@
 import { HOST, PORT, STATUS } from "./configs/constants.js";
-import { aboutProject } from "./configs/data.js";
+import { AboutProject } from "./configs/data.js";
 import { booksRoute } from "./routes/books.route.js";
 import Hapi from "@hapi/hapi";
 import dotenv from "dotenv";
@@ -11,6 +11,8 @@ async function main() {
     port: PORT,
     host: HOST,
   });
+
+  const aboutProject = new AboutProject();
 
   server.route([
     {
