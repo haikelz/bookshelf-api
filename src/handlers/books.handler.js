@@ -1,10 +1,10 @@
-import { Book, Status } from "../configs/data.js";
+import { Status } from "../entities/books.entity.js";
+import { books } from "../repositories/books.repository.js";
 import { escapeHtml } from "@hapi/hoek";
 import { nanoid } from "nanoid";
 
 export class BooksHandler {
   getAllBooks(req, h) {
-    const books = [new Book()];
     const status = new Status();
     const query = req.query;
 
@@ -51,7 +51,6 @@ export class BooksHandler {
   }
 
   getDetailBook(req, h) {
-    const books = [new Book()];
     const status = new Status();
     const bookId = escapeHtml(req.params.bookId);
     const findBook = books.find((item) => item.id === bookId);
@@ -76,7 +75,6 @@ export class BooksHandler {
   }
 
   saveNewBook(req, h) {
-    const books = [new Book()];
     const status = new Status();
     const { name, pageCount, readPage } = req.payload;
 
@@ -115,7 +113,6 @@ export class BooksHandler {
   }
 
   updateBook(req, h) {
-    const books = [new Book()];
     const status = new Status();
     const bookId = escapeHtml(req.params.bookId);
 
@@ -182,7 +179,6 @@ export class BooksHandler {
   }
 
   deleteBook(req, h) {
-    const books = [new Book()];
     const status = new Status();
     const bookId = req.params.bookId;
     const findSameId = books.findIndex((item) => item.id === bookId);

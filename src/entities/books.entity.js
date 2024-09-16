@@ -20,8 +20,6 @@ export class Book {
   }
 }
 
-export let books = [];
-
 export class AboutProject {
   constructor(
     author = "Haikel Ilham Hakim",
@@ -33,8 +31,8 @@ export class AboutProject {
 }
 
 export class Status {
-  constructor(fail = "fail", success = "success") {
-    this.fail = fail;
-    this.success = success;
+  constructor() {
+    this.fail = "fail";
+    this.success = "success";
   }
 }

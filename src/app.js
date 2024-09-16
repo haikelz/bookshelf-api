@@ -1,5 +1,5 @@
-import { HOST, PORT, STATUS } from "./configs/constants.js";
-import { AboutProject } from "./configs/data.js";
+import { HOST, PORT } from "./configs/constants.js";
+import { AboutProject, Status } from "./entities/books.entity.js";
 import { booksRoute } from "./routes/books.route.js";
 import Hapi from "@hapi/hapi";
 import dotenv from "dotenv";
@@ -12,6 +12,8 @@ async function main() {
     host: HOST,
   });
 
+  const status = new Status();
+
   const aboutProject = new AboutProject();
 
   server.route([
@@ -21,7 +23,7 @@ async function main() {
       handler: (_, h) => {
         return h
           .response({
-            status: STATUS.success,
+            status: status.success,
             message: "Sukses mendapatkan data About this project!",
             data: aboutProject,
           })
