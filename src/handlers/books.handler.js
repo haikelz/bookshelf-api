@@ -21,20 +21,28 @@ export class BooksHandler {
     const query = req.query;
 
     if (query.name || query.reading || query.finished) {
-      const filteredBooks = books.filter((item) => {
-        let isFiltered = true;
+      const filteredBooks = books
+        .filter((item) => {
+          let isFiltered = true;
 
-        for (const key in query) {
-          isFiltered =
-            isFiltered &&
-            item[key] ==
-              (key === "reading" || key === "finished"
-                ? Number(escapeHtml(query[key]))
-                : escapeHtml(query[key]));
-        }
+          for (const key in query) {
+            isFiltered =
+              isFiltered &&
+              (query.name
+                ? item.name.toLowerCase().includes(query.name.toLowerCase())
+                : item[key] ==
+                  (key === "reading" || key === "finished"
+                    ? Number(escapeHtml(query[key]))
+                    : escapeHtml(query[key])));
+          }
 
-        return isFiltered;
-      });
+          return isFiltered;
+        })
+        .map((item) => ({
+          id: item.id,
+          name: item.name,
+          publisher: item.publisher,
+        }));
 
       return h
         .response({
@@ -115,6 +123,7 @@ export class BooksHandler {
     books.push({
       id: bookId,
       ...req.payload,
+      finished: pageCount === readPage ? true : false,
       insertedAt: dateNow,
       updatedAt: dateNow,
     });
