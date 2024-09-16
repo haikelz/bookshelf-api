@@ -5,6 +5,11 @@ const booksHandler = new BooksHandler();
 export const booksRoute = [
   {
     method: "GET",
+    path: "/",
+    handler: booksHandler.getHome,
+  },
+  {
+    method: "GET",
     path: "/books",
     handler: booksHandler.getAllBooks,
   },

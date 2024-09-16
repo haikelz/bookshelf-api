@@ -1,9 +1,21 @@
-import { Status } from "../entities/books.entity.js";
+import { AboutProject, Status } from "../entities/books.entity.js";
 import { books } from "../repositories/books.repository.js";
 import { escapeHtml } from "@hapi/hoek";
 import { nanoid } from "nanoid";
 
 export class BooksHandler {
+  getHome(_, h) {
+    const aboutProject = new AboutProject();
+
+    return h
+      .response({
+        status: Status.success,
+        message: "Sukses mendapatkan data About this project!",
+        data: aboutProject,
+      })
+      .code(200);
+  }
+
   getAllBooks(req, h) {
     const status = new Status();
     const query = req.query;

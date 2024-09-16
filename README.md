@@ -25,3 +25,7 @@
   ![test eslint and prettier](/public/docs/Screenshot%20from%202024-09-16%2001-48-57.png)
 
   ![test eslint and prettier](/public/docs/Screenshot%20from%202024-09-16%2001-49-02.png)
+
+- Run project in Docker
+
+  ![run project in Docker](/public/docs/Screenshot%20from%202024-09-16%2017-36-08.png)
