@@ -5,6 +5,11 @@ const booksHandler = new BooksHandler();
 export const booksRoute = [
   {
     method: "GET",
+    path: "/",
+    handler: booksHandler.getHome,
+  },
+  {
+    method: "GET",
     path: "/books",
     handler: booksHandler.getAllBooks,
   },
@@ -20,12 +25,12 @@ export const booksRoute = [
   },
   {
     method: "PUT",
-    path: "/books/:bookId",
+    path: "/books/{bookId}",
     handler: booksHandler.updateBook,
   },
   {
     method: "DELETE",
-    path: "/books/:bookId",
+    path: "/books/{bookId}",
     handler: booksHandler.deleteBook,
   },
 ];

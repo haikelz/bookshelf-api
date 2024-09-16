@@ -1,8 +1,15 @@
 {
   "name": "bookshelf-api",
   "version": "1.0.0",
+  "author": "Haikel Ilham Hakim",
+  "license": "MIT",
   "main": "app.js",
   "type": "module",
+  "description": "This project are created for final assignment that given from Dicoding Indonesia",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/haikelz/bookshelf-api"
+  },
   "scripts": {
     "format:check": "prettier --check .",
     "format:write": "prettier --write .",
@@ -10,16 +17,9 @@
     "lint:fix": "eslint --fix .",
     "start": "node src/app.js"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "description": "",
   "dependencies": {
-    "@hapi/boom": "^10.0.1",
     "@hapi/hapi": "^21.3.10",
     "@hapi/hoek": "^11.0.4",
-    "graphql": "^16.9.0",
-    "graphql-yoga": "^5.7.0",
     "nanoid": "^5.0.7"
   },
   "devDependencies": {
