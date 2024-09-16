@@ -210,6 +210,13 @@ export class BooksHandler {
           message: "Buku berhasil dihapus",
         })
         .code(200);
+    } else {
+      return h
+        .response({
+          status: status.fail,
+          message: "Buku gagal dihapus. Id tidak ditemukan",
+        })
+        .code(404);
     }
   }
 }
