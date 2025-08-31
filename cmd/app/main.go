@@ -8,6 +8,9 @@ import (
 
 	"github.com/labstack/echo-contrib/echoprometheus"
 	"github.com/labstack/echo/v4"
+	echoSwagger "github.com/swaggo/echo-swagger"
+
+	_ "github.com/swaggo/echo-swagger/example/docs"
 )
 
 func main() {
@@ -21,13 +24,15 @@ func main() {
 
 	app.Group("/api").GET("/v1/books", controllers.BooksController)
 
-	app.Group("/api").GET("/v1/:bookId", controllers.BookByIdController)
+	app.Group("/api").GET("/v1/books/:bookId", controllers.BookByIdController)
 
 	app.Group("/api").POST("/v1/books", controllers.CreateBookController)
 
-	app.Group("/api").PUT("/v1/:bookId", controllers.UpdateBookController)
+	app.Group("/api").PUT("/v1/books/:bookId", controllers.UpdateBookController)
 
-	app.Group("/api").DELETE("/v1/:bookId", controllers.DeleteBookController)
+	app.Group("/api").DELETE("/v1/books/:bookId", controllers.DeleteBookController)
+
+	app.Group("/api").GET("/v1/docs/*", echoSwagger.WrapHandler)
 
 	if err := app.Start(":5000"); err != nil {
 		log.Fatalf("Failed to start server: %v", err)
