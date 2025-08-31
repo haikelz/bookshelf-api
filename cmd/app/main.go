@@ -1,58 +1,35 @@
 package main
 
 import (
+	"bookshelf/internal/configs"
+	"bookshelf/internal/controllers"
 	"log"
 	"net/http"
 
+	"github.com/labstack/echo-contrib/echoprometheus"
 	"github.com/labstack/echo/v4"
-	"github.com/labstack/echo/v4/middleware"
 )
 
 func main() {
-	e := echo.New()
+	app := configs.NewEcho()
 
-	e.Use(middleware.Logger())
-	e.Use(middleware.Recover())
-	e.Use(middleware.CORS())
-	e.Use(middleware.CSRF())
-	e.Use(middleware.Secure())
-	e.Use(middleware.Gzip())
-
-	e.Group("/api")
-
-	e.GET("/", func(c echo.Context) error {
+	app.GET("/", func(c echo.Context) error {
 		return c.String(http.StatusOK, "Hello, World!")
 	})
 
-	e.GET("/v1", func(c echo.Context) error {
-		return c.String(http.StatusOK, "Hello, World v1!")
-	})
+	app.Group("/api").GET("/metrics", echoprometheus.NewHandler())
 
-	e.GET("/v1/books", func(c echo.Context) error {
-		return c.String(http.StatusOK, "Hello, World v2!")
-	})
+	app.Group("/api").GET("/v1/books", controllers.BooksController)
 
-	e.GET("/v1/:bookId", func(c echo.Context) error {
-		return c.String(http.StatusOK, "Hello, World v3!")
-	})
+	app.Group("/api").GET("/v1/:bookId", controllers.BookByIdController)
 
-	e.GET("/v1/books/:bookId", func(c echo.Context) error {
-		return c.String(http.StatusOK, "Hello, World v4!")
-	})
+	app.Group("/api").POST("/v1/books", controllers.CreateBookController)
 
-	e.POST("/v1/books", func(c echo.Context) error {
-		return c.String(http.StatusOK, "Hello, World v5!")
-	})
+	app.Group("/api").PUT("/v1/:bookId", controllers.UpdateBookController)
 
-	e.PUT("/v1/:bookId", func(c echo.Context) error {
-		return c.String(http.StatusOK, "Hello, World v5!")
-	})
+	app.Group("/api").DELETE("/v1/:bookId", controllers.DeleteBookController)
 
-	e.DELETE("/v1/:bookId", func(c echo.Context) error {
-		return c.String(http.StatusOK, "Hello, World v6!")
-	})
-
-	if err := e.Start(":5000"); err != nil {
+	if err := app.Start(":5000"); err != nil {
 		log.Fatalf("Failed to start server: %v", err)
 	}
 }

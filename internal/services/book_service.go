@@ -3,19 +3,22 @@ package services
 import (
 	"bookshelf/internal/entities"
 	"bookshelf/internal/repositories"
+	"context"
+	"encoding/json"
+	"io"
 	"slices"
 
 	"github.com/google/uuid"
 )
 
-func GetBooks() entities.BooksResponse {
+func GetBooks(c context.Context) entities.BooksResponse {
 	return entities.BooksResponse{
 		Status: "success",
 		Data:   repositories.Books,
 	}
 }
 
-func GetBookById(id string) entities.BookDetailResponse {
+func GetBookById(c context.Context, id string) entities.BookDetailResponse {
 	var book entities.Book
 
 	for _, b := range repositories.Books {
@@ -31,8 +34,12 @@ func GetBookById(id string) entities.BookDetailResponse {
 	}
 }
 
-func CreateBook(book entities.Book) entities.BookChangesResponse {
+func CreateBook(c context.Context, body io.ReadCloser) entities.BookChangesResponse {
+	book := entities.Book{}
+	json.NewDecoder(body).Decode(&book)
+
 	book.ID = uuid.New().String()
+
 	repositories.Books = append(repositories.Books, book)
 
 	return entities.BookChangesResponse{
@@ -41,7 +48,10 @@ func CreateBook(book entities.Book) entities.BookChangesResponse {
 	}
 }
 
-func UpdateBook(id string, book entities.Book) entities.BookChangesResponse {
+func UpdateBook(c context.Context, id string, body io.ReadCloser) entities.BookChangesResponse {
+	book := entities.Book{}
+	json.NewDecoder(body).Decode(&book)
+
 	for i, b := range repositories.Books {
 		if b.ID == id {
 			repositories.Books[i] = book
@@ -54,7 +64,7 @@ func UpdateBook(id string, book entities.Book) entities.BookChangesResponse {
 	}
 }
 
-func DeleteBook(id string) entities.BookChangesResponse {
+func DeleteBook(c context.Context, id string) entities.BookChangesResponse {
 	for _, b := range repositories.Books {
 		if b.ID == id {
 			repositories.Books = slices.DeleteFunc(repositories.Books, func(s entities.Book) bool {
