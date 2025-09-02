@@ -11,18 +11,3 @@ type Book struct {
 	ReadPage  int    `json:"readPage"`
 	Reading   bool   `json:"reading"`
 }
-
-type BooksResponse struct {
-	Status string `json:"status"`
-	Data   []Book `json:"data"`
-}
-
-type BookDetailResponse struct {
-	Status string `json:"status"`
-	Data   Book   `json:"data"`
-}
-
-type BookChangesResponse struct {
-	Status  string `json:"status"`
-	Message string `json:"message"`
-}

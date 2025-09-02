@@ -6,74 +6,73 @@ import (
 	"context"
 	"encoding/json"
 	"io"
-	"slices"
 
 	"github.com/google/uuid"
+	"gorm.io/gorm"
 )
 
-func GetBooks(c context.Context) entities.BooksResponse {
+func GetBooks(c context.Context, books []entities.Book, db *gorm.DB) (entities.BooksResponse, error) {
+	err := repositories.GetAll(db, &books)
+	if err != nil {
+		return entities.BooksResponse{}, err
+	}
+
 	return entities.BooksResponse{
 		Status: "success",
-		Data:   repositories.Books,
-	}
+		Data:   books,
+	}, nil
 }
 
-func GetBookById(c context.Context, id string) entities.BookDetailResponse {
-	var book entities.Book
-
-	for _, b := range repositories.Books {
-		if b.ID == id {
-			book = b
-			break
-		}
+func GetBookById(c context.Context, id string, book entities.Book, db *gorm.DB) (entities.BookDetailResponse, error) {
+	err := repositories.GetById(db, &book, id)
+	if err != nil {
+		return entities.BookDetailResponse{}, err
 	}
 
 	return entities.BookDetailResponse{
 		Status: "success",
 		Data:   book,
-	}
+	}, nil
 }
 
-func CreateBook(c context.Context, body io.ReadCloser) entities.BookChangesResponse {
-	book := entities.Book{}
+func CreateBook(c context.Context, body io.ReadCloser, book entities.Book, db *gorm.DB) (entities.BookChangesResponse, error) {
 	json.NewDecoder(body).Decode(&book)
 
 	book.ID = uuid.New().String()
 
-	repositories.Books = append(repositories.Books, book)
+	err := repositories.Create(db, &book)
+	if err != nil {
+		return entities.BookChangesResponse{}, err
+	}
 
 	return entities.BookChangesResponse{
 		Status:  "success",
 		Message: "Book created successfully",
-	}
+	}, nil
 }
 
-func UpdateBook(c context.Context, id string, body io.ReadCloser) entities.BookChangesResponse {
-	book := entities.Book{}
+func UpdateBook(c context.Context, id string, body io.ReadCloser, book entities.Book, db *gorm.DB) (entities.BookChangesResponse, error) {
 	json.NewDecoder(body).Decode(&book)
 
-	for i, b := range repositories.Books {
-		if b.ID == id {
-			repositories.Books[i] = book
-		}
+	err := repositories.Update(db, &book, id)
+	if err != nil {
+		return entities.BookChangesResponse{}, err
 	}
 
 	return entities.BookChangesResponse{
 		Status:  "success",
 		Message: "Book updated successfully",
-	}
+	}, nil
 }
 
-func DeleteBook(c context.Context, id string) entities.BookChangesResponse {
-	for _, b := range repositories.Books {
-		if b.ID == id {
-			repositories.Books = slices.DeleteFunc(repositories.Books, func(s entities.Book) bool {
-				return s.ID == id
-			})
-		}
+func DeleteBook(c context.Context, id string, book entities.Book, db *gorm.DB) (entities.BookChangesResponse, error) {
+	err := repositories.Delete(db, &book, id)
+	if err != nil {
+		return entities.BookChangesResponse{}, err
 	}
+
 	return entities.BookChangesResponse{
 		Status:  "success",
 		Message: "Book deleted successfully",
-	}
+	}, nil
 }
