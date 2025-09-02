@@ -26,7 +26,5 @@ func NewGorm() *gorm.DB {
 		log.Fatalf("Failed to auto migrate: %v", err)
 	}
 
-	log.Println("Database migrated successfully")
-
 	return db
 }

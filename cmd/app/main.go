@@ -1,6 +1,7 @@
 package main
 
 import (
+	"bookshelf/internal/configs"
 	"bookshelf/internal/server/routes"
 	"bookshelf/internal/utils"
 
@@ -9,5 +10,9 @@ import (
 
 func main() {
 	utils.LoadEnv()
-	routes.BookRoute()
+
+	echo := configs.NewEcho()
+	db := configs.NewGorm()
+
+	routes.BookRoute(db, echo)
 }

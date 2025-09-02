@@ -12,12 +12,14 @@ func NewEcho() *echo.Echo {
 	e.Use(echoprometheus.NewMiddleware("bookshelf"))
 	e.Use(middleware.Logger())
 	e.Use(middleware.Recover())
-	e.Use(middleware.CORS())
+	e.Use(middleware.CORSWithConfig(middleware.CORSConfig{
+		AllowOrigins: []string{"*"},
+		AllowHeaders: []string{echo.HeaderOrigin, echo.HeaderContentType, echo.HeaderAccept},
+		AllowMethods: []string{echo.GET, echo.POST, echo.PUT, echo.DELETE},
+	}))
 	e.Use(middleware.Secure())
 	e.Use(middleware.Gzip())
 	e.Use(middleware.Recover())
-
-	e.Logger.Fatal(e.Start(":8080"))
 
 	return e
 }
