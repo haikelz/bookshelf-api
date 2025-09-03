@@ -1,6 +1,8 @@
 package configs
 
 import (
+	"bookshelf/internal/utils"
+
 	"github.com/labstack/echo-contrib/echoprometheus"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
@@ -9,7 +11,7 @@ import (
 func NewEcho() *echo.Echo {
 	e := echo.New()
 
-	e.Use(echoprometheus.NewMiddleware("bookshelf"))
+	e.Use(echoprometheus.NewMiddleware(utils.MIDDLEWARE_NAME))
 	e.Use(middleware.Logger())
 	e.Use(middleware.Recover())
 	e.Use(middleware.CORSWithConfig(middleware.CORSConfig{
