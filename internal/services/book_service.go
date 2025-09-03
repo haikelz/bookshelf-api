@@ -37,7 +37,6 @@ func GetBookById(c context.Context, id string, book entities.Book, db *gorm.DB) 
 
 func CreateBook(c context.Context, body io.ReadCloser, book entities.Book, db *gorm.DB) (entities.BookChangesResponse, error) {
 	json.NewDecoder(body).Decode(&book)
-
 	book.ID = uuid.New().String()
 
 	err := repositories.Create(db, &book)

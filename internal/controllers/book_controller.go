@@ -45,7 +45,7 @@ func CreateBookController(c echo.Context, db *gorm.DB) error {
 func UpdateBookController(c echo.Context, db *gorm.DB) error {
 	var book entities.Book
 
-	response, err := services.UpdateBook(c.Request().Context(), c.Param("id"), c.Request().Body, book, db)
+	response, err := services.UpdateBook(c.Request().Context(), c.Param("bookId"), c.Request().Body, book, db)
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, err)
 	}

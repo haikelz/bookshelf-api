@@ -15,6 +15,7 @@ func BookRoute(db *gorm.DB, e *echo.Echo) *echo.Echo {
 		return c.String(http.StatusOK, "Hello, World!")
 	})
 
+	// Prometheus
 	e.Group("/api").GET("/metrics", echoprometheus.NewHandler())
 
 	e.Group("/api").GET("/v1/books", func(c echo.Context) error {
@@ -37,8 +38,10 @@ func BookRoute(db *gorm.DB, e *echo.Echo) *echo.Echo {
 		return controllers.DeleteBookController(c, db)
 	})
 
+	// Swagger
 	e.Group("/api").GET("/v1/docs/*", echoSwagger.WrapHandler)
 
 	e.Logger.Fatal(e.Start(":8080"))
+
 	return e
 }
