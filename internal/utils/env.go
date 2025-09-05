@@ -8,15 +8,13 @@ import (
 )
 
 func LoadEnv() {
-	_ = viper.BindEnv("DATABASE_URL")
+	_ = viper.New()
 
 	if err := viper.ReadInConfig(); err != nil {
 		if _, ok := err.(viper.ConfigFileNotFoundError); !ok {
 			log.Printf("Error reading config file: %v", err)
 		}
 	}
-
-	viper.GetViper()
 }
 
 func Env() entities.Env {

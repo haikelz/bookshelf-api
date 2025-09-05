@@ -41,7 +41,7 @@ func BookRoute(db *gorm.DB, e *echo.Echo) *echo.Echo {
 	// Swagger
 	e.Group("/api").GET("/v1/docs/*", echoSwagger.WrapHandler)
 
-	e.Logger.Fatal(e.Start(":8080"))
+	e.Logger.Fatal(e.Start(":8000"))
 
 	return e
 }
