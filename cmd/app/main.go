@@ -9,6 +9,7 @@ import (
 )
 
 func main() {
+	configs.NewViper()
 	utils.LoadEnv()
 
 	echo := configs.NewEcho()

@@ -5,6 +5,7 @@ import (
 	"bookshelf/internal/repositories"
 	"context"
 	"encoding/json"
+	"fmt"
 	"io"
 
 	"github.com/google/uuid"
@@ -51,7 +52,9 @@ func CreateBook(c context.Context, body io.ReadCloser, book entities.Book, db *g
 }
 
 func UpdateBook(c context.Context, id string, body io.ReadCloser, book entities.Book, db *gorm.DB) (entities.BookChangesResponse, error) {
+	fmt.Println(id)
 	json.NewDecoder(body).Decode(&book)
+	fmt.Println(book)
 
 	err := repositories.Update(db, &book, id)
 	if err != nil {

@@ -2,8 +2,8 @@ package configs
 
 import (
 	"bookshelf/internal/entities"
+	"bookshelf/internal/utils"
 	"log"
-	"os"
 
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
@@ -11,9 +11,7 @@ import (
 )
 
 func NewGorm() *gorm.DB {
-	dbUrl := os.Getenv("DATABASE_URL")
-
-	db, err := gorm.Open(postgres.Open(dbUrl), &gorm.Config{
+	db, err := gorm.Open(postgres.Open(utils.Env().DatabaseURL), &gorm.Config{
 		Logger: logger.Default.LogMode(logger.Info),
 	})
 	if err != nil {

@@ -1,15 +1,26 @@
 package utils
 
 import (
+	"bookshelf/internal/entities"
 	"log"
 
-	"github.com/joho/godotenv"
+	"github.com/spf13/viper"
 )
 
 func LoadEnv() {
-	err := godotenv.Load()
+	_ = viper.BindEnv("DATABASE_URL")
 
-	if err != nil {
-		log.Fatalf("Error loading .env file: %v", err)
+	if err := viper.ReadInConfig(); err != nil {
+		if _, ok := err.(viper.ConfigFileNotFoundError); !ok {
+			log.Printf("Error reading config file: %v", err)
+		}
+	}
+
+	viper.GetViper()
+}
+
+func Env() entities.Env {
+	return entities.Env{
+		DatabaseURL: viper.GetString("DATABASE_URL"),
 	}
 }
